@@ -9,58 +9,21 @@ import { normalizeTestCases } from "../../../util/test";
 const YEAR = 2024;
 const DAY = 3;
 
-// solution path: /home/trevorsg/dev/t-hugs/advent-of-code/years/2024/03/index.ts
-// data path    : /home/trevorsg/dev/t-hugs/advent-of-code/years/2024/03/data.txt
+// solution path: /Users/user/src/github.com/SStoyanov22/advent-of-code/years/2024/03/index.ts
+// data path    : /Users/user/src/github.com/SStoyanov22/advent-of-code/years/2024/03/data.txt
 // problem url  : https://adventofcode.com/2024/day/3
 
 async function p2024day3_part1(input: string, ...params: any[]) {
-	const mulInstruction = /mul\(\d{1,3},\d{1,3}\)/g;
-
-	let match: RegExpExecArray | null;
-	let total = 0;
-	while ((match = mulInstruction.exec(input)) !== null) {
-		const [a, b] = match[0]
-			.replace(/[^\d,]/g, "")
-			.split(",")
-			.map(Number);
-		total += a * b;
-	}
-	return total;
+	return "Not implemented";
 }
 
 async function p2024day3_part2(input: string, ...params: any[]) {
-	const removeDonts = /don\'t\(\).*?do\(\)/gs;
-	const noDonts = input.replace(removeDonts, "");
-
-	const mulInstruction = /mul\(\d{1,3},\d{1,3}\)/g;
-
-	let match: RegExpExecArray | null;
-	let total = 0;
-	while ((match = mulInstruction.exec(noDonts)) !== null) {
-		const [a, b] = match[0]
-			.replace(/[^\d,]/g, "")
-			.split(",")
-			.map(Number);
-		total += a * b;
-	}
-	return total;
+	return "Not implemented";
 }
 
 async function run() {
-	const part1tests: TestCase[] = [
-		{
-			input: `xmul(2,4)%&mul[3,7]!@^do_not_mul(5,5)+mul(32,64]then(mul(11,8)mul(8,5))`,
-			extraArgs: [],
-			expected: `161`,
-			expectedPart2: ``,
-		},
-	];
-	const part2tests: TestCase[] = [{
-		input: `xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))`,
-		extraArgs: [],
-		expected: `48`,
-		expectedPart2: ``,
-	}];
+	const part1tests: TestCase[] = [];
+	const part2tests: TestCase[] = [];
 
 	const [p1testsNormalized, p2testsNormalized] = normalizeTestCases(part1tests, part2tests);
 
@@ -85,7 +48,7 @@ async function run() {
 	const part1Solution = String(await p2024day3_part1(input));
 	const part1After = performance.now();
 
-	const part2Before = performance.now();
+	const part2Before = performance.now()
 	const part2Solution = String(await p2024day3_part2(input));
 	const part2After = performance.now();
 

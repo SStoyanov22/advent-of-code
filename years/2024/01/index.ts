@@ -9,66 +9,55 @@ import { normalizeTestCases } from "../../../util/test";
 const YEAR = 2024;
 const DAY = 1;
 
-// solution path: /home/trevorsg/dev/t-hugs/advent-of-code/years/2024/01/index.ts
-// data path    : /home/trevorsg/dev/t-hugs/advent-of-code/years/2024/01/data.txt
+// solution path: /Users/user/src/github.com/SStoyanov22/advent-of-code/years/2024/01/index.ts
+// data path    : /Users/user/src/github.com/SStoyanov22/advent-of-code/years/2024/01/data.txt
 // problem url  : https://adventofcode.com/2024/day/1
 
 async function p2024day1_part1(input: string, ...params: any[]) {
-	const leftNums: number[] = [];
-	const rightNums: number[] = [];
+	const left: number[] = [];
+	const right: number[] = [];
 
 	const lines = input.split("\n");
-	for (const line of lines) {
-		const [left, right] = line.split("   ").map(Number);
-		leftNums.push(left);
-		rightNums.push(right);
+	for(const line of lines) {
+		const [l,r] = line.split("   ").map(Number);
+		left.push(l);
+		right.push(r);
 	}
 
-	leftNums.sort((a, b) => a - b);
-	rightNums.sort((a, b) => a - b);
+	left.sort((a, b) => a - b);
+	right.sort((a, b) => a - b);
 
 	let totalDist = 0;
-	for (let i = 0; i < leftNums.length; i++) {
-		totalDist += Math.abs(leftNums[i] - rightNums[i]);
+	for (let i = 0; i < left.length; i++) {
+		totalDist += Math.abs(left[i] - right[i]);
 	}
 	return totalDist;
 }
 
 async function p2024day1_part2(input: string, ...params: any[]) {
-	const leftNums: number[] = [];
-	const rightNums: Map<number, number> = new Map();
+	const left: number[] = [];
+	const right: Map<number, number> = new Map();
 
 	const lines = input.split("\n");
-	for (const line of lines) {
-		const [left, right] = line.split("   ").map(Number);
-		leftNums.push(left);
-		if (rightNums.has(right)) {
-			rightNums.set(right, rightNums.get(right)! + 1);
+	for(const line of lines) {
+		const [l,r] = line.split("   ").map(Number);
+		left.push(l);
+		if (right.has(r)) {
+			right.set(r, right.get(r)! + 1);
 		} else {
-			rightNums.set(right, 1);
+			right.set(r, 1);
 		}
 	}
 
 	let score = 0;
-	for (let i = 0; i < leftNums.length; i++) {
-		const leftNum = leftNums[i];
-		score += leftNum * (rightNums.get(leftNum) ?? 0);
+	for (const element of left) {
+		score += element * (right.get(element) ?? 0);
 	}
 	return score;
 }
 
 async function run() {
-	const part1tests: TestCase[] = [{
-		input: `3   4
-4   3
-2   5
-1   3
-3   9
-3   3`,
-		extraArgs: [],
-		expected: `11`,
-		expectedPart2: `31`,
-	}];
+	const part1tests: TestCase[] = [];
 	const part2tests: TestCase[] = [];
 
 	const [p1testsNormalized, p2testsNormalized] = normalizeTestCases(part1tests, part2tests);
