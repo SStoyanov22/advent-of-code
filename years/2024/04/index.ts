@@ -5,6 +5,7 @@ import chalk from "chalk";
 import { log, logSolution, trace } from "../../../util/log";
 import { performance } from "perf_hooks";
 import { normalizeTestCases } from "../../../util/test";
+import { Cell, Grid } from "../../../util/grid";
 
 const YEAR = 2024;
 const DAY = 4;
@@ -14,11 +15,60 @@ const DAY = 4;
 // problem url  : https://adventofcode.com/2024/day/4
 
 async function p2024day4_part1(input: string, ...params: any[]) {
-	return "Not implemented";
+	const grid = new Grid({ serialized: input });
+
+	const search = "XMAS";
+	const searches = ["east", "southeast", "south", "southwest", "west", "northwest", "north", "northeast"] as const;
+
+	let targetCount = 0;
+	for (const cell of grid) {
+		if (cell.value === search[0]) {
+			for (const direction of searches) {
+				const candidates: Cell[] = [cell];
+				for (let i = 1; i < search.length; ++i) {
+					const candidate = (candidates[i - 1] as any)[direction]() as Cell;
+					if (candidate) {
+						candidates.push(candidate);
+					} else {
+						break;
+					}
+				}
+				if (candidates.length === search.length) {
+					let good = true;
+					for (let i = 0; i < search.length; ++i) {
+						if (candidates[i].value !== search[i]) {
+							good = false;
+							break;
+						}
+					}
+					if (good) {
+						targetCount++;
+					}
+				}
+			}
+		}
+	}
+	return targetCount;
 }
 
 async function p2024day4_part2(input: string, ...params: any[]) {
-	return "Not implemented";
+	const grid = new Grid({serialized: input});
+	const search = ["MAS", "SAM"];
+	let count = 0;
+
+	for(const cell of grid){
+		if (cell.isEdge()) {
+			continue;
+		}
+		const d1 = [cell.northwest(), cell, cell.southeast()].map(c => c?.value).join("");
+		const d2 = [cell.southwest(), cell, cell.northeast()].map(c => c?.value).join("");
+
+		if(search.indexOf(d1) > -1 && search.indexOf(d2) > - 1){
+			count++;
+		}
+		
+	}
+	return count;
 }
 
 async function run() {
