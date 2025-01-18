@@ -12,13 +12,57 @@ const DAY = 5;
 // solution path: /Users/user/src/github.com/SStoyanov22/advent-of-code/years/2024/05/index.ts
 // data path    : /Users/user/src/github.com/SStoyanov22/advent-of-code/years/2024/05/data.txt
 // problem url  : https://adventofcode.com/2024/day/5
+// Part 2
+const isUpdateCorrect = (rules: number[][], update: number[]): boolean =>
+	!rules.some(([a, b]) =>
+		update.includes(a) && update.includes(b) &&
+		update.indexOf(a) > update.indexOf(b)
+	);
+function orderUpdate(rules: number[][], update: number[]): number[] {
+	while (!isUpdateCorrect(rules, update)) {
+		rules.forEach(([a, b]) => {
+			const indexA = update.indexOf(a);
+			const indexB = update.indexOf(b);
+			if (indexA > -1 && indexB > -1 && indexA > indexB) {
+				[update[indexA], update[indexB]] = [
+					update[indexB],
+					update[indexA],
+				];
+			}
+		});
+	}
+	return update;
+}
 
 async function p2024day5_part1(input: string, ...params: any[]) {
-	return "Not implemented";
+	const [rules, updates] = input.split('\n\n').map(
+		(el, i) => el.split('\n').map(
+			(el) => el.trim().split(['|', ','][i]).map(Number))
+	);
+
+	const isUpdateCorrect = (rules: number[][], update: number[]): boolean =>
+	!rules.some(([a, b]) =>
+		update.includes(a) && update.includes(b) &&
+		update.indexOf(a) > update.indexOf(b)
+	);
+	
+	return updates
+		.filter(update => isUpdateCorrect(rules, update))
+		.reduce((acc, update) => acc + update[Math.floor(update.length / 2)], 0);
 }
 
 async function p2024day5_part2(input: string, ...params: any[]) {
-	return "Not implemented";
+	const [rules, updates] = input.split('\n\n').map(
+		(el, i) => el.split('\n').map(
+			(el) => el.trim().split(['|', ','][i]).map(Number))
+	);
+	return updates
+	.filter(update => !isUpdateCorrect(rules, update))
+	.reduce(
+		(acc, update) =>
+			acc +(orderUpdate(rules,update)[Math.floor(update.length / 2)]),
+			0
+	)
 }
 
 async function run() {
