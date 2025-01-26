@@ -1,4 +1,4 @@
-import _ from "lodash";
+import _, { eq } from "lodash";
 import * as util from "../../../util/util";
 import * as test from "../../../util/test";
 import chalk from "chalk";
@@ -12,13 +12,54 @@ const DAY = 7;
 // solution path: /Users/user/src/github.com/SStoyanov22/advent-of-code/years/2024/07/index.ts
 // data path    : /Users/user/src/github.com/SStoyanov22/advent-of-code/years/2024/07/data.txt
 // problem url  : https://adventofcode.com/2024/day/7
-
-async function p2024day7_part1(input: string, ...params: any[]) {
-	return "Not implemented";
+function testEquation(
+	numbers: number[],
+	target: number,
+	combine: (num1: number, num2: number) => number[]
+): boolean {
+	if(numbers.length === 1){
+		return numbers[0] === target
+	}
+	return numbers[0] > target ? 
+		false : combine(numbers[0], numbers[1]).some(
+			(num) => testEquation(
+				[num, ...numbers.slice(2)],
+				target,
+				combine))
 }
 
+function readEquations(input: string): Map<number, number[]> {
+	return new Map(
+		input.trim().split('\n').map(line => {
+		  const [key, values] = line.split(':').map(part => part.trim());
+		  return [Number(key), values.split(' ').map(Number)];
+		}))
+}
+
+async function p2024day7_part1(input: string, ...params: any[]) {
+	const equations = readEquations(input);
+	
+	return Array.from(equations)
+		.filter(([target, numbers]) =>  // filter for correct equations
+			testEquation(
+				numbers, 
+				target, 
+				(num1, num2) => [num1 + num2, num1 * num2]))
+		.map(([target]) => target) // collect only targets of equations
+		.reduce((sum, target) => sum + target, 0) // sum targets
+};
+
 async function p2024day7_part2(input: string, ...params: any[]) {
-	return "Not implemented";
+	const equations = readEquations(input);
+	
+	return Array.from(equations)
+		.filter(([target, numbers]) =>  // filter for correct equations
+			testEquation(
+				numbers, 
+				target, 
+				(num1, num2) => [num1 + num2, num1 * num2, parseInt(`${num1}${num2}`)]))
+		.map(([target]) => target) // collect only targets of equations
+		.reduce((sum, target) => sum + target, 0) // sum targets
 }
 
 async function run() {
